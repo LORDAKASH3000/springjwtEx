@@ -2,7 +2,7 @@ package com.example.springjwtEx.model;
 
 public class AuthenticationResponse {
 
-    private String token;
+    private final String token;
 
     public AuthenticationResponse(String token) {
         this.token = token;

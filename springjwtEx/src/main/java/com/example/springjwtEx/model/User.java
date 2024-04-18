@@ -12,8 +12,8 @@ import java.util.List;
 @Table(name="user")
 public class User implements UserDetails {
     @Id
-            @GeneratedValue(strategy = GenerationType.IDENTITY)
-            @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     Integer id;
 
     @Column(name = "first_name")

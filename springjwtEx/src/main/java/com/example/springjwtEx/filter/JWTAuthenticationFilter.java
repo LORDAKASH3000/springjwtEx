@@ -1,5 +1,6 @@
 package com.example.springjwtEx.filter;
 
+import com.example.springjwtEx.model.User;
 import com.example.springjwtEx.service.JWTService;
 import com.example.springjwtEx.service.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
@@ -51,11 +52,17 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         String token = authHeader.substring(7);
-        String username = jwtService.extractUsername(token);
-
-        if(username != null && SecurityContextHolder.getContext().getAuthentication()==null){
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
+//        String username = jwtService.extractUsername(token);
+        String id = jwtService.extractUserId(token);
+        if(id != null && SecurityContextHolder.getContext().getAuthentication()==null){
+//            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+///
+//            if(jwtService.isValid(token, userDetails)){
+//                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+//                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//                SecurityContextHolder.getContext().setAuthentication(authToken);
+//            }
+            User userDetails = userDetailsService.loadUserByUserId(Integer.valueOf(id));
             if(jwtService.isValid(token, userDetails)){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

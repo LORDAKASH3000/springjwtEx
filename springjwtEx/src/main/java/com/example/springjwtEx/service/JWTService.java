@@ -14,15 +14,21 @@ import java.util.function.Function;
 
 @Service
 public class JWTService {
-    private String SECRET_KEY = "ca21021fa511a1017173fd1ef04af43e589471b72aa76fc726b5d1bcf171771a";
 
     public String extractUsername(String token){
         return extractClaim(token, Claims::getSubject);
     }
+    public String extractUserId(String token){
+        return extractClaim(token, Claims::getSubject);
+    }
 
-    public boolean isValid(String token, UserDetails user){
-        String username = extractUsername(token);
-        return (username.equals(user.getUsername()) && !isTokenExpired(token));
+//    public boolean isValid(String token, UserDetails user){
+//        String username = extractUsername(token);
+//        return (username.equals(user.getUsername()) && !isTokenExpired(token));
+//    }
+    public boolean isValid(String token, User user){
+        String userid = extractUserId(token);
+        return (Integer.valueOf(userid).equals(user.getId()) && !isTokenExpired(token));
     }
 
     private boolean isTokenExpired(String token) {
@@ -51,7 +57,8 @@ public class JWTService {
 
         return Jwts
                 .builder()
-                .subject(user.getUsername())
+//                .subject(user.getUsername())
+                .subject(String.valueOf(user.getId()))
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis()+1000*60*60*24))
                 .signWith(getSigningKey())
@@ -59,6 +66,7 @@ public class JWTService {
     }
 
     private SecretKey getSigningKey(){
+        String SECRET_KEY = "ca21021fa511a1017173fd1ef04af43e589471b72aa76fc726b5d1bcf171771a";
         byte[] keyBytes = Decoders.BASE64URL.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }

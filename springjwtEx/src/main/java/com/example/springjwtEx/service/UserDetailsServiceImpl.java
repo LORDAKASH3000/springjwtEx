@@ -1,6 +1,8 @@
 package com.example.springjwtEx.service;
 
+import com.example.springjwtEx.model.User;
 import com.example.springjwtEx.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,5 +32,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException("User Not Found!"));
+    }
+
+//    public User loadUserByUserId(Integer id){
+//        return userRepository.getReferenceById(id);
+//    }
+
+    @Transactional // Ensure the method executes within a transactional context
+    public User loadUserByUserId(Integer userId) {
+        // Fetch the user entity eagerly
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userId));
     }
 }

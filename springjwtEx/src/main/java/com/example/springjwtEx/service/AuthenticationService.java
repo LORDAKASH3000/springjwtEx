@@ -50,7 +50,8 @@ public class AuthenticationService {
                 )
         );
 
-        User user = repository.findByUsername(request.getUsername()).orElseThrow(()->new UsernameNotFoundException("User Not Found!"));
+//        User user = repository.findByUsername(request.getUsername()).orElseThrow(()->new UsernameNotFoundException("User Not Found!"));
+        User user = repository.getReferenceById(request.getId());
         String token = jwtService.generateToken(user);
         return new AuthenticationResponse(token);
     }
